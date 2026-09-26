@@ -47,9 +47,11 @@ services:
       - "127.0.0.1:8080:8080" # Stalwart Admin Dashboard
     volumes:
       - stalwart_data:/opt/stalwart-mail
+      - ../stalwart/config.toml:/etc/stalwart/config.toml:ro
       - ../stalwart/config.toml:/opt/stalwart-mail/etc/config.toml:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./dkim:/opt/stalwart-mail/etc/dkim:ro
+      - ./dkim:/etc/stalwart/dkim:ro
     networks:
       - vxmail-internal
       - vxmail-public
