@@ -41,7 +41,7 @@ driver = "postgresql"
 address = "postgres:5432"
 database = "vxmail"
 user = "vxmail"
-secret = "vxmail_secret_2026"
+secret = "vxmail_production_pass_2026"
 
 # Storage Configuration
 [store.db]
@@ -50,7 +50,7 @@ driver = "postgresql"
 address = "postgres:5432"
 database = "vxmail"
 user = "vxmail"
-secret = "vxmail_secret_2026"
+secret = "vxmail_production_pass_2026"
 
 [store.blob]
 type = "fs"
