@@ -64,6 +64,7 @@ if [ ! -d "/etc/letsencrypt/live/mail.vxmusic.in" ]; then
           -subj "/CN=mail.vxmusic.in"
     }
 fi
+chmod -R 755 /etc/letsencrypt || true
 
 # 6. Build and Launch Docker Containers
 echo "🚢 Launching Docker Containers with docker-compose.prod.yml..."

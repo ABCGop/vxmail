@@ -31,8 +31,8 @@ protocol = "http"
 
 # Certificate configuration
 [certificate.default]
-cert = "/opt/stalwart-mail/etc/certs/fullchain.pem"
-private-key = "/opt/stalwart-mail/etc/certs/privkey.pem"
+cert = "/etc/letsencrypt/live/mail.vxmusic.in/fullchain.pem"
+private-key = "/etc/letsencrypt/live/mail.vxmusic.in/privkey.pem"
 
 # Authentication & Directory backend (PostgreSQL connection)
 [directory.sql]
