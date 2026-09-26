@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { checkDatabaseHealth } from "@vxmail/database";
 import { APP_CONFIG } from "@vxmail/config";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const dbHealth = await checkDatabaseHealth();
 
