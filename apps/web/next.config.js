@@ -5,7 +5,7 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@vxmail/config", "@vxmail/database", "@vxmail/email"],
   experimental: {
-    serverComponentsExternalPackages: ["ioredis"],
+    serverComponentsExternalPackages: ["ioredis", "nodemailer"],
   },
   webpack: (config, { isServer }) => {
     config.resolve.extensionAlias = {
@@ -21,6 +21,7 @@ const nextConfig = {
         tls: false,
         child_process: false,
         ioredis: false,
+        nodemailer: false,
       };
     }
     return config;

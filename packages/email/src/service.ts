@@ -77,9 +77,11 @@ export class DevelopmentMailTransport implements IMailTransport {
   }
 }
 
+import nodemailer, { type Transporter } from "nodemailer";
+
 /**
- * Production Stalwart Mail Server Transport.
- * Connects via SMTP with TLS and credentials to Stalwart Mail Server.
+ * Production Stalwart / SMTP Mail Server Transport.
+ * Connects via SMTP with TLS and credentials to Stalwart Mail Server or Relay.
  */
 export class StalwartMailTransport implements IMailTransport {
   public name = "StalwartMailTransport";
@@ -88,6 +90,7 @@ export class StalwartMailTransport implements IMailTransport {
   private username?: string;
   private password?: string;
   private useTls: boolean;
+  private transporter: Transporter | null = null;
 
   constructor(config?: {
     host?: string;
@@ -98,53 +101,94 @@ export class StalwartMailTransport implements IMailTransport {
   }) {
     this.host = config?.host || process.env.SMTP_HOST || "mail.vxmusic.in";
     this.port = config?.port || Number(process.env.SMTP_PORT || 587);
-    this.username = config?.username || process.env.SMTP_USERNAME;
-    this.password = config?.password || process.env.SMTP_PASSWORD;
+    this.username = config?.username || process.env.SMTP_USERNAME || process.env.SMTP_USER;
+    this.password = config?.password || process.env.SMTP_PASSWORD || process.env.SMTP_PASS;
     this.useTls = config?.useTls ?? (this.port === 465);
   }
 
-  async verifyConnection(): Promise<{ ok: boolean; message: string }> {
-    if (!this.username || !this.password) {
-      return { ok: false, message: "Stalwart SMTP credentials not configured in environment." };
+  private getTransporter(): Transporter {
+    if (!this.transporter) {
+      this.transporter = nodemailer.createTransport({
+        host: this.host,
+        port: this.port,
+        secure: this.useTls,
+        auth: (this.username && this.password) ? {
+          user: this.username,
+          pass: this.password,
+        } : undefined,
+        tls: {
+          rejectUnauthorized: false, // Allow self-signed TLS inside internal Docker network
+        },
+      });
     }
-    // Return connection readiness info
-    return {
-      ok: true,
-      message: `Stalwart SMTP configured at ${this.host}:${this.port} (TLS: ${this.useTls})`,
-    };
+    return this.transporter;
+  }
+
+  async verifyConnection(): Promise<{ ok: boolean; message: string }> {
+    try {
+      const transporter = this.getTransporter();
+      await transporter.verify();
+      return {
+        ok: true,
+        message: `SMTP connection verified at ${this.host}:${this.port}`,
+      };
+    } catch (err: any) {
+      return { ok: false, message: `SMTP verification failed: ${err.message}` };
+    }
   }
 
   async sendMail(message: OutboundMailMessage): Promise<MailDeliveryReceipt> {
     const messageId = message.messageId || generateMessageId();
-    
-    // In production, when SMTP credentials are live, this issues SMTP dispatch.
-    // When SMTP credentials are mock/unset, fall back to safe queued dispatch.
-    if (!this.username || !this.password) {
-      console.warn("[VxMail Stalwart Transport] Missing SMTP credentials; falling back to sandboxed delivery receipt.");
+    const cleanId = messageId.replace(/^<|>$/g, "");
+
+    try {
+      const transporter = this.getTransporter();
+      const info = await transporter.sendMail({
+        from: message.from,
+        to: message.to,
+        cc: message.cc,
+        bcc: message.bcc,
+        subject: message.subject,
+        text: message.text,
+        html: message.html,
+        messageId: `<${cleanId}>`,
+        inReplyTo: message.inReplyTo,
+        references: message.references,
+        replyTo: message.replyTo,
+        attachments: message.attachments?.map((att) => ({
+          filename: att.filename,
+          contentType: att.contentType,
+          content: att.contentBase64 ? Buffer.from(att.contentBase64, "base64") : undefined,
+        })),
+      });
+
+      console.log(`[VxMail SMTP Dispatch] Sent email to ${message.to.join(", ")} via ${this.host}:${this.port}. Info: ${info.response}`);
+
       return {
-        messageId,
-        status: "QUEUED",
-        smtpResponse: "250 Queued for Stalwart Delivery",
-        acceptedRecipients: message.to,
-        rejectedRecipients: [],
+        messageId: `<${cleanId}>`,
+        status: "SENT",
+        smtpResponse: info.response || "250 OK Message accepted for delivery",
+        acceptedRecipients: (info.accepted as string[]) || message.to,
+        rejectedRecipients: (info.rejected as string[]) || [],
+        queuedAt: new Date(),
+        dispatchedAt: new Date(),
+        server: this.host,
+        isMock: false,
+      };
+    } catch (err: any) {
+      console.error(`[VxMail SMTP Dispatch Error] Failed to send via ${this.host}:${this.port}:`, err.message);
+
+      return {
+        messageId: `<${cleanId}>`,
+        status: "FAILED",
+        smtpResponse: `SMTP Error: ${err.message}`,
+        acceptedRecipients: [],
+        rejectedRecipients: message.to,
         queuedAt: new Date(),
         server: this.host,
-        isMock: true,
+        isMock: false,
       };
     }
-
-    // Dynamic import nodemailer if available or standard envelope dispatch
-    return {
-      messageId,
-      status: "SENT",
-      smtpResponse: `250 2.1.5 Message accepted by Stalwart (${this.host}) for relay`,
-      acceptedRecipients: message.to,
-      rejectedRecipients: [],
-      queuedAt: new Date(),
-      dispatchedAt: new Date(),
-      server: this.host,
-      isMock: false,
-    };
   }
 }
 
@@ -153,7 +197,8 @@ export const devTransportInstance = new DevelopmentMailTransport();
 export const stalwartTransportInstance = new StalwartMailTransport();
 
 export function getMailTransport(): IMailTransport {
-  if (process.env.NODE_ENV === "production" && process.env.SMTP_HOST && process.env.SMTP_USERNAME) {
+  // If SMTP_HOST is explicitly configured, use Stalwart/SMTP transport
+  if (process.env.SMTP_HOST && process.env.SMTP_HOST !== "sandbox") {
     return stalwartTransportInstance;
   }
   return devTransportInstance;
