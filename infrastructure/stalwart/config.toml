@@ -1,0 +1,85 @@
+# ==============================================================================
+# Stalwart Mail Server Configuration for VxMail & VxMusic Ecosystem
+# Domain: vxmusic.in | Mail Host: mail.vxmusic.in
+# ==============================================================================
+
+[server]
+hostname = "mail.vxmusic.in"
+
+[server.listener.smtp]
+bind = ["[::]:25"]
+protocol = "smtp"
+
+[server.listener.submission]
+bind = ["[::]:587"]
+protocol = "smtp"
+tls.implicit = false
+
+[server.listener.submissions]
+bind = ["[::]:465"]
+protocol = "smtp"
+tls.implicit = true
+
+[server.listener.imaps]
+bind = ["[::]:993"]
+protocol = "imap"
+tls.implicit = true
+
+[server.listener.management]
+bind = ["[::]:8080"]
+protocol = "http"
+
+# Certificate configuration
+[certificate.default]
+cert = "/opt/stalwart-mail/etc/certs/fullchain.pem"
+private-key = "/opt/stalwart-mail/etc/certs/privkey.pem"
+
+# Authentication & Directory backend (PostgreSQL connection)
+[directory.sql]
+type = "sql"
+driver = "postgresql"
+address = "postgres:5432"
+database = "vxmail"
+user = "vxmail"
+secret = "vxmail_secret_2026"
+
+# Storage Configuration
+[store.db]
+type = "sql"
+driver = "postgresql"
+address = "postgres:5432"
+database = "vxmail"
+user = "vxmail"
+secret = "vxmail_secret_2026"
+
+[store.blob]
+type = "s3"
+endpoint = "http://minio:9000"
+bucket = "vxmail-attachments"
+access-key = "vxmail_s3_admin"
+secret-key = "vxmail_s3_supersecret_key"
+
+# DKIM Signing
+[signature.dkim."vxmusic.in"]
+selector = "vxmail2026"
+domain = "vxmusic.in"
+headers = ["From", "To", "Subject", "Date", "Message-ID", "Cc", "Reply-To"]
+algorithm = "rsa-sha256"
+canonicalization = "relaxed/relaxed"
+key = "/opt/stalwart-mail/etc/dkim/vxmail2026.private.key"
+
+# Inbound SPF, DKIM & DMARC Validation
+[resolver]
+type = "system"
+
+[session.auth]
+mechanisms = ["plain", "login"]
+
+# Rate Limiting & Abuse Prevention
+[limit.outbound]
+recipient-rate = "100/1h"
+message-rate = "50/1h"
+
+[limit.inbound]
+connection-rate = "30/1m"
+concurrency = 10

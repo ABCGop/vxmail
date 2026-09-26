@@ -1,0 +1,160 @@
+version: "3.9"
+
+services:
+  # 1. PostgreSQL Relational Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: vxmail-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-vxmail}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vxmail_production_pass_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-vxmail}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - vxmail-internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vxmail -d vxmail"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Redis Key-Value Store & Realtime Message Bus
+  redis:
+    image: redis:7-alpine
+    container_name: vxmail-redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - vxmail-internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 3. Stalwart Mail Server (SMTP, IMAP, JMAP, DKIM, SPF, DMARC)
+  stalwart:
+    image: stalwartlabs/mail-server:latest
+    container_name: vxmail-stalwart
+    restart: always
+    ports:
+      - "25:25"       # Inbound SMTP (MX)
+      - "587:587"     # Client Submission (STARTTLS)
+      - "465:465"     # SMTPS (Implicit TLS)
+      - "993:993"     # IMAP over SSL
+      - "127.0.0.1:8080:8080" # Stalwart Admin Dashboard
+    volumes:
+      - stalwart_data:/opt/stalwart-mail
+      - ../stalwart/config.toml:/opt/stalwart-mail/etc/config.toml:ro
+      - certs_data:/opt/stalwart-mail/etc/certs:ro
+      - dkim_data:/opt/stalwart-mail/etc/dkim:ro
+    networks:
+      - vxmail-internal
+      - vxmail-public
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # 4. MinIO S3 Object Storage for Email Attachments
+  minio:
+    image: minio/minio:latest
+    container_name: vxmail-minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY:-vxmail_s3_admin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:-vxmail_s3_secret_prod_key}
+    volumes:
+      - minio_data:/data
+    networks:
+      - vxmail-internal
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 5. VxMail Web Application (Next.js with SSE Realtime Bus)
+  web:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    container_name: vxmail-web
+    restart: always
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vxmail}:${POSTGRES_PASSWORD:-vxmail_production_pass_2026}@postgres:5432/vxmail?schema=public
+      REDIS_URL: redis://redis:6379
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-super-secret-jwt-key-min-32-chars-long-vxmusic}
+      INBOUND_WEBHOOK_SECRET: ${INBOUND_WEBHOOK_SECRET:-vxmail_webhook_secure_token_2026}
+      SMTP_HOST: stalwart
+      SMTP_PORT: 587
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-vxmail_s3_admin}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-vxmail_s3_secret_prod_key}
+      S3_BUCKET: vxmail-attachments
+    networks:
+      - vxmail-internal
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # 6. VxMail Background Queue Worker (BullMQ)
+  worker:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.worker
+    container_name: vxmail-worker
+    restart: always
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vxmail}:${POSTGRES_PASSWORD:-vxmail_production_pass_2026}@postgres:5432/vxmail?schema=public
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: stalwart
+      SMTP_PORT: 587
+    networks:
+      - vxmail-internal
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # 7. Nginx Edge Reverse Proxy with SSL Termination & SSE Passthrough
+  nginx:
+    image: nginx:alpine
+    container_name: vxmail-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - certs_data:/etc/letsencrypt:ro
+    networks:
+      - vxmail-internal
+      - vxmail-public
+    depends_on:
+      - web
+
+networks:
+  vxmail-internal:
+    driver: bridge
+  vxmail-public:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  stalwart_data:
+  minio_data:
+  certs_data:
+  dkim_data:

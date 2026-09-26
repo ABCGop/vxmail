@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" fill="none">
+  <!-- VxMail Geometric Brand Mark -->
+  <rect x="4" y="8" width="32" height="32" rx="7" fill="#14171A" stroke="#252A30" stroke-width="1.5"/>
+  <path d="M12 16L20 25L28 16" stroke="#00E5B9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 28L17 22" stroke="#64748B" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 28L23 22" stroke="#64748B" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="20" cy="29" r="1.5" fill="#00E5B9"/>
+  <!-- Typography Wordmark -->
+  <text x="44" y="29" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" font-size="20" letter-spacing="-0.03em" fill="#F8FAFC">Vx<tspan fill="#00E5B9">Mail</tspan></text>
+  <text x="110" y="22" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="500" font-size="9" letter-spacing="0.04em" fill="#64748B">BY VX</text>
+</svg>

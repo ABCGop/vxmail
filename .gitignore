@@ -1,0 +1,35 @@
+# Node & Workspaces
+node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js build output
+.next/
+out/
+
+# Prisma & SQLite
+*.db
+*.db-journal
+dev.db
+dev.db-journal
+
+# Environment variables
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Certificates & Private Keys
+*.pem
+*.key
+*.crt
+certs/
+dkim/
+
+# OS Files
+.DS_Store
+Thumbs.db

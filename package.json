@@ -1,0 +1,30 @@
+{
+  "name": "vxmail-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm --workspace=@vxmail/web run dev",
+    "build": "npm --workspace=@vxmail/database run generate && npm --workspace=@vxmail/web run build",
+    "start": "npm --workspace=@vxmail/web run start",
+    "worker": "npm --workspace=@vxmail/worker run start",
+    "test": "tsx --test tests/vxmail.test.ts",
+    "lint": "npm --workspace=@vxmail/web run lint",
+    "db:generate": "npm --workspace=@vxmail/database run generate",
+    "db:push": "npm --workspace=@vxmail/database run push",
+    "db:migrate": "npm --workspace=@vxmail/database run migrate",
+    "db:seed": "npm --workspace=@vxmail/database run seed"
+  },
+  "devDependencies": {
+    "caniuse-lite": "^1.0.30001812",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.9"
+  },
+  "dependencies": {
+    "lucide-react": "^1.48.0"
+  }
+}

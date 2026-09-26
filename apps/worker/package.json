@@ -1,0 +1,23 @@
+{
+  "name": "@vxmail/worker",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@vxmail/config": "*",
+    "@vxmail/database": "*",
+    "@vxmail/email": "*",
+    "bullmq": "^5.14.0",
+    "dotenv": "^16.4.5",
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/ioredis": "^5.0.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.4"
+  }
+}

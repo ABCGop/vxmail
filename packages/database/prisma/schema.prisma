@@ -1,0 +1,328 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String          @id @default(cuid())
+  email          String          @unique
+  username       String          @unique
+  displayName    String
+  passwordHash   String
+  avatarUrl      String?
+  emailVerified  Boolean         @default(false)
+  role           String          @default("USER") // USER, SUPPORT, ADMIN, SUPER_ADMIN
+  status         String          @default("ACTIVE") // ACTIVE, SUSPENDED, LOCKED
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  mailboxes      Mailbox[]
+  sessions       Session[]
+  contacts       Contact[]
+  settings       UserSettings?
+  notifications  Notification[]
+  securityEvents SecurityEvent[]
+  auditLogs      AuditLog[]
+
+  @@index([email])
+  @@index([username])
+}
+
+model Mailbox {
+  id           String        @id @default(cuid())
+  userId       String
+  emailAddress String        @unique
+  storageQuota BigInt        @default(16106127360) // 15 GB default
+  storageUsed  BigInt        @default(0)
+  status       String        @default("ACTIVE") // ACTIVE, SUSPENDED, LOCKED
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aliases      Alias[]
+  threads      Thread[]
+  messages     Message[]
+  drafts       Draft[]
+  labels       Label[]
+
+  @@index([userId])
+  @@index([emailAddress])
+}
+
+model Alias {
+  id           String   @id @default(cuid())
+  mailboxId    String
+  aliasAddress String   @unique
+  createdAt    DateTime @default(now())
+
+  mailbox      Mailbox  @relation(fields: [mailboxId], references: [id], onDelete: Cascade)
+
+  @@index([mailboxId])
+  @@index([aliasAddress])
+}
+
+model Session {
+  id           String    @id @default(cuid())
+  userId       String
+  token        String    @unique
+  ipAddress    String?
+  userAgent    String?
+  expiresAt    DateTime
+  lastActiveAt DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Thread {
+  id            String         @id @default(cuid())
+  mailboxId     String
+  subject       String
+  snippet       String?
+  unreadCount   Int            @default(0)
+  messageCount  Int            @default(1)
+  isStarred     Boolean        @default(false)
+  isImportant   Boolean        @default(false)
+  isArchived    Boolean        @default(false)
+  isSpam        Boolean        @default(false)
+  isTrash       Boolean        @default(false)
+  lastMessageAt DateTime       @default(now())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  mailbox       Mailbox        @relation(fields: [mailboxId], references: [id], onDelete: Cascade)
+  messages      Message[]
+  drafts        Draft[]
+  labels        ThreadLabel[]
+
+  @@index([mailboxId, lastMessageAt])
+  @@index([mailboxId, isArchived, isTrash, isSpam])
+}
+
+model Message {
+  id             String         @id @default(cuid())
+  threadId       String
+  mailboxId      String
+  messageId      String         @unique // RFC 5322 Message-ID
+  inReplyTo      String?
+  references     String?
+  from           String
+  to             String         // JSON array of strings
+  cc             String?        // JSON array of strings
+  bcc            String?        // JSON array of strings
+  replyTo        String?
+  subject        String
+  textBody       String?
+  htmlBody       String?
+  receivedAt     DateTime?
+  sentAt         DateTime?      @default(now())
+  readAt         DateTime?
+  isStarred      Boolean        @default(false)
+  isImportant    Boolean        @default(false)
+  isDraft        Boolean        @default(false)
+  isArchived     Boolean        @default(false)
+  isSpam         Boolean        @default(false)
+  isDeleted      Boolean        @default(false)
+  dkimVerified   Boolean        @default(true)
+  spfVerified    Boolean        @default(true)
+  deliveryStatus String         @default("DELIVERED") // QUEUED, SENDING, SENT, DELIVERED, BOUNCED, REJECTED, FAILED
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  thread         Thread         @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  mailbox        Mailbox        @relation(fields: [mailboxId], references: [id], onDelete: Cascade)
+  attachments    Attachment[]
+  events         EmailEvent[]
+  labels         MessageLabel[]
+
+  @@index([threadId])
+  @@index([mailboxId])
+  @@index([messageId])
+  @@index([sentAt])
+}
+
+model Attachment {
+  id          String   @id @default(cuid())
+  messageId   String
+  filename    String
+  mimeType    String
+  size        Int
+  storageKey  String?
+  checksum    String?
+  createdAt   DateTime @default(now())
+
+  message     Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+}
+
+model Draft {
+  id              String   @id @default(cuid())
+  mailboxId       String
+  threadId        String?
+  to              String   @default("[]") // JSON string
+  cc              String   @default("[]") // JSON string
+  bcc             String   @default("[]") // JSON string
+  subject         String   @default("")
+  body            String   @default("")
+  attachmentsJson String   @default("[]") // JSON string
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  mailbox         Mailbox  @relation(fields: [mailboxId], references: [id], onDelete: Cascade)
+  thread          Thread?  @relation(fields: [threadId], references: [id], onDelete: SetNull)
+
+  @@index([mailboxId])
+  @@index([updatedAt])
+}
+
+model Label {
+  id            String         @id @default(cuid())
+  mailboxId     String
+  name          String
+  color         String         @default("#8b5cf6")
+  createdAt     DateTime       @default(now())
+
+  mailbox       Mailbox        @relation(fields: [mailboxId], references: [id], onDelete: Cascade)
+  messages      MessageLabel[]
+  threads       ThreadLabel[]
+
+  @@unique([mailboxId, name])
+  @@index([mailboxId])
+}
+
+model MessageLabel {
+  id        String   @id @default(cuid())
+  messageId String
+  labelId   String
+  createdAt DateTime @default(now())
+
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  label     Label    @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, labelId])
+  @@index([labelId])
+}
+
+model ThreadLabel {
+  id        String   @id @default(cuid())
+  threadId  String
+  labelId   String
+  createdAt DateTime @default(now())
+
+  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  label     Label    @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@unique([threadId, labelId])
+  @@index([labelId])
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  email     String
+  avatar    String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, email])
+  @@index([userId])
+}
+
+model EmailEvent {
+  id        String   @id @default(cuid())
+  messageId String
+  eventType String   // QUEUED, SENDING, SENT, DELIVERED, BOUNCED, REJECTED, OPENED
+  details   String?
+  createdAt DateTime @default(now())
+
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  type      String   @default("INFO") // INFO, SUCCESS, WARNING, ALERT
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+}
+
+model SecurityEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  eventType String   // LOGIN_SUCCESS, LOGIN_FAILED, PASSWORD_CHANGED, SESSION_REVOKED, RATE_LIMIT
+  ipAddress String?
+  userAgent String?
+  severity  String   @default("LOW") // LOW, MEDIUM, HIGH, CRITICAL
+  metadata  String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model LoginAttempt {
+  id            String   @id @default(cuid())
+  ipAddress     String
+  identifier    String
+  success       Boolean
+  failureReason String?
+  createdAt     DateTime @default(now())
+
+  @@index([ipAddress, createdAt])
+  @@index([identifier, createdAt])
+}
+
+model UserSettings {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  theme                String   @default("dark") // dark, slate, neon, light
+  density              String   @default("comfortable") // comfortable, compact
+  signature            String   @default("")
+  replyBehavior        String   @default("reply") // reply, reply_all
+  conversationView     Boolean  @default(true)
+  blockExternalImages  Boolean  @default(true)
+  desktopNotifications Boolean  @default(false)
+  updatedAt            DateTime @updatedAt
+
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String   // ADMIN_SUSPEND_USER, ADMIN_DELETE_MAILBOX, EXPORT_ACCOUNT, PASSWORD_RESET
+  targetType String   // USER, MAILBOX, THREAD, SYSTEM
+  targetId   String?
+  ipAddress  String?
+  details    String?
+  createdAt  DateTime @default(now())
+
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+}

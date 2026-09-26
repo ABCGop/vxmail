@@ -1,0 +1,30 @@
+# Symlink / mirror of root docker-compose.yml
+# See root docker-compose.yml for full definitions
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vxmail-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: vxmail
+      POSTGRES_PASSWORD: vxmail_secret_2026
+      POSTGRES_DB: vxmail
+
+  redis:
+    image: redis:7-alpine
+    container_name: vxmail-redis
+    ports:
+      - "6379:6379"
+
+  stalwart:
+    image: stalwartlabs/mail-server:latest
+    container_name: vxmail-stalwart
+    ports:
+      - "25:25"
+      - "587:587"
+      - "465:465"
+      - "993:993"
+      - "8080:8080"

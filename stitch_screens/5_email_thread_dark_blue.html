@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0b0f17;color:#dfe2ee;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-primary-container": "#004965",
+          "on-tertiary": "#003351",
+          "inverse-surface": "#dfe2ee",
+          "on-background": "#dfe2ee",
+          "surface-variant": "#31353e",
+          "error-container": "#93000a",
+          "outline-variant": "#3e484f",
+          "on-error-container": "#ffdad6",
+          "background": "#0b0f17",
+          "tertiary": "#a1d2ff",
+          "on-tertiary-container": "#00486f",
+          "surface-container-lowest": "#0a0e16",
+          "on-tertiary-fixed-variant": "#004b73",
+          "on-primary": "#00354a",
+          "surface-dim": "#0f131c",
+          "on-secondary-container": "#00344e",
+          "on-secondary-fixed-variant": "#004c6e",
+          "on-secondary": "#00344d",
+          "on-secondary-fixed": "#001e2f",
+          "on-error": "#690005",
+          "error": "#ffb4ab",
+          "primary-fixed": "#c4e7ff",
+          "surface-container-high": "#262a33",
+          "secondary-fixed": "#c9e6ff",
+          "surface-container": "#162032",
+          "surface-container-highest": "#31353e",
+          "secondary-container": "#00a2e6",
+          "surface-tint": "#7bd0ff",
+          "surface-bright": "#353942",
+          "on-primary-fixed": "#001e2c",
+          "primary-container": "#38bdf8",
+          "tertiary-fixed": "#cce5ff",
+          "surface": "#0f172a",
+          "tertiary-container": "#5cb9ff",
+          "on-surface-variant": "#94a3b8",
+          "on-primary-fixed-variant": "#004c69",
+          "on-tertiary-fixed": "#001d31",
+          "inverse-on-surface": "#2c3039",
+          "secondary": "#89ceff",
+          "on-surface": "#f8fafc",
+          "primary": "#38bdf8",
+          "outline": "#64748b",
+          "surface-container-low": "#111827",
+          "inverse-primary": "#00668a",
+          "tertiary-fixed-dim": "#93ccff",
+          "secondary-fixed-dim": "#89ceff",
+          "primary-fixed-dim": "#7bd0ff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "margin-mobile": "1rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "space-sm": "0.5rem",
+          "gutter-compact": "0.5rem",
+          "gutter": "1rem",
+          "margin": "1.5rem",
+          "space-md": "0.75rem",
+          "space-lg": "1.25rem"
+        },
+        "fontFamily": {
+          "body-md": [
+            "Geist"
+          ],
+          "headline-xl": [
+            "Geist"
+          ],
+          "headline-md": [
+            "Geist"
+          ],
+          "label-sm": [
+            "JetBrains Mono"
+          ],
+          "headline-lg": [
+            "Geist"
+          ],
+          "body-lg": [
+            "Geist"
+          ],
+          "headline-xl-mobile": [
+            "Geist"
+          ],
+          "label-lg": [
+            "JetBrains Mono"
+          ],
+          "label-md": [
+            "JetBrains Mono"
+          ],
+          "headline-sm": [
+            "Geist"
+          ],
+          "body-sm": [
+            "Geist"
+          ]
+        },
+        "fontSize": {
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-xl": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "500"
+            }
+          ],
+          "label-sm": [
+            "10px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.04em",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-lg": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-xl-mobile": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-lg": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "label-md": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.03em",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-sm": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "500"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.005em",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }
+</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-[#0b0f17] text-[#f8fafc] antialiased min-h-screen flex flex-col font-['Geist']"><header class="fixed top-0 w-full z-50 pt-safe bg-[#0b0f17]/90 backdrop-blur-xl border-b border-[#1e293b] shadow-[0_2px_16px_rgba(0,0,0,0.4)]"><div class="h-16 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs"><button class="w-11 h-11 -ml-space-xs flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[20px]">arrow_back_ios_new</span></button><img alt="VxMail Logo" class="h-7 w-auto object-contain hidden xs:inline" src="https://lh3.googleusercontent.com/aida/AEtjO1V15K1bbVlIZg6BM4yWXFEyOaJsVQhyFfhRkwZ21qkfIdYE8B5GeqdEqFCsv7_wGM5Vupzil1aY30uR2ZFT6m_KzngVd8WPvsw4o_Zmi7xXS6HVxNP_UYqoua7slVgjXbQSrkllpyScFWsHu_w5Wz3SN7l6kuX5_9oJ_9tc3mQpveK_DBwzt9CIlhcMsKtSLmSvQZ0dzHoy2ZYKFu1YaX7iDfpk7u3X6ejsuSNl5RgAMO4qSb_lqA8hIXg"/></div><h1 class="font-headline-md text-headline-md text-[#f8fafc] font-semibold tracking-tight truncate flex-1 text-center xs:text-left xs:ml-space-xs">Thread View</h1><div class="flex items-center gap-space-xs flex-shrink-0"><button class="w-11 h-11 flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-[#334155]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo5E2sd3QcVO8UDRA_d_SK1SGleRMTIBrUsx7PG1wP0BcOy2nphWB4NB3bWCYLuuF0dhfikm8xhMBP0wxlTIhNTM2RKrAye83PuFGUKm-_uQNdlntTOoxMw_GD2seGLJyHFSgEsMsp95122X5L0xlNbVNh40fxEQL5nRLteekBF56SsnYs7YzpGejK9PitoYEYKUNKt-SlKev7lkjXpX4IyUT4nvuvI-muPrkN9P-d4cObyKusHovW"/></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-safe bg-[#0b0f17]"><div class="flex flex-col w-full text-[#f8fafc]">
+<!-- Thread Context Bar & Quick Actions Toolbar -->
+<div class="sticky top-0 z-20 w-full bg-[#0b0f17]/95 backdrop-blur-md px-margin py-space-sm border-b border-[#1e293b] shadow-md flex items-center justify-between gap-space-xs">
+<button class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-xl bg-[#162032] hover:bg-[#1e293b] border border-[#334155] text-[#f8fafc] transition-all" onclick="history.back()">
+<span class="material-symbols-outlined text-[18px] text-[#38bdf8]">arrow_back</span>
+<span class="font-label-md text-label-md text-[#f8fafc] font-medium tracking-wide">Inbox</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#162032] border border-[#334155] active:bg-[#1e293b] text-[#94a3b8] hover:text-[#f8fafc] transition-colors shadow-sm" id="archive-btn" title="Archive">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#162032] border border-[#334155] active:bg-[#1e293b] text-[#94a3b8] hover:text-[#f8fafc] transition-colors shadow-sm" id="unread-btn" title="Mark Unread">
+<span class="material-symbols-outlined text-[18px]">mark_email_unread</span>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#162032] border border-[#334155] active:bg-[#1e293b] text-[#94a3b8] hover:text-[#ffb4ab] transition-colors shadow-sm" id="delete-btn" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#162032] border border-[#334155] active:bg-[#1e293b] text-[#94a3b8] hover:text-[#38bdf8] transition-colors shadow-sm" id="star-btn" title="Star">
+<span class="material-symbols-outlined text-[18px]" id="star-icon">star</span>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#162032] border border-[#334155] active:bg-[#1e293b] text-[#94a3b8] hover:text-[#f8fafc] transition-colors shadow-sm" id="more-actions-btn" title="More options">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Main Thread Scrollable Canvas -->
+<div class="px-margin pt-space-md pb-36 flex flex-col gap-space-md">
+<!-- Thread Title & Project Tags -->
+<div class="bg-[#162032] border border-[#334155] rounded-xl p-space-md shadow-lg flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#0369a1]/30 border border-[#0284c7]/40 text-[#38bdf8] font-semibold">ENG-CORE</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#1e293b] border border-[#334155] text-[#89ceff] font-semibold">VxMusic Q4</span>
+</div>
+<h2 class="font-headline-xl-mobile text-headline-xl-mobile text-[#f8fafc] font-semibold tracking-tight">
+        Project update — VxMusic redesign
+      </h2>
+<div class="flex items-center justify-between text-[#94a3b8] pt-space-xs">
+<div class="flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] text-[#38bdf8]">sync</span>
+<span class="font-medium text-[#94a3b8]">Thread #4092</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#64748b]">2 messages</span>
+</div>
+</div>
+<!-- Collapsible Earlier History Card -->
+<div class="bg-[#162032] border border-[#334155] rounded-xl p-space-md shadow-md transition-all duration-200 cursor-pointer hover:border-[#38bdf8]/50 active:bg-[#1e293b]" id="collapsed-card">
+<div class="flex items-center justify-between gap-space-sm" id="collapse-toggle-header">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-7 h-7 rounded-full bg-[#1e293b] text-[#38bdf8] border border-[#334155] flex items-center justify-center font-label-md text-label-md shrink-0 font-medium">
+            VS
+          </div>
+<div class="min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-[#f8fafc] font-medium truncate">Vishesh Sharma</span>
+<span class="font-label-sm text-label-sm text-[#64748b]">Oct 22</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#94a3b8] truncate" id="snippet-text">
+              Looks great, Aarav. Can we verify the mobile memory footprint?...
+            </p>
+</div>
+</div>
+<div class="w-8 h-8 rounded-lg bg-[#0f172a] border border-[#334155] flex items-center justify-center text-[#94a3b8] shrink-0">
+<span class="material-symbols-outlined text-[18px]" id="expand-icon">unfold_more</span>
+</div>
+</div>
+<!-- Expandable Hidden Message Content -->
+<div class="hidden mt-space-md pt-space-md flex flex-col gap-space-sm bg-[#0f172a] border border-[#334155] p-space-md rounded-lg" id="collapsed-body">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-[#64748b]">
+<span>vishesh@vxmusic.in</span>
+<span>11:15 AM</span>
+</div>
+<p class="font-body-md text-body-md text-[#e2e8f0] leading-relaxed">
+          Looks great, Aarav. Can we verify the mobile memory footprint under continuous audio streaming sessions? Specifically want to ensure the audio buffer garbage collector doesn't hitch the 120Hz frame rates when users scroll through thread attachments.
+        </p>
+<div class="flex items-center gap-space-xs pt-space-xs">
+<button class="font-label-sm text-label-sm px-space-sm py-1 rounded bg-[#162032] border border-[#334155] text-[#38bdf8] font-semibold hover:bg-[#1e293b]">
+            Quote
+          </button>
+</div>
+</div>
+</div>
+<!-- Active Primary Message Card -->
+<div class="bg-[#162032] border border-[#334155] rounded-xl p-space-md shadow-lg flex flex-col gap-space-md relative overflow-hidden">
+<!-- Subtle top engineered edge highlight -->
+<div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#38bdf8] to-transparent"></div>
+<!-- Sender Info Header -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative shrink-0">
+<img class="w-12 h-12 rounded-xl object-cover ring-1 ring-[#38bdf8]/40" data-alt="Close up cinematic portrait of Aarav Sharma, a South Asian lead sound software engineer with modern glasses in a moody dark music studio with cyan ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnNkWz48dTazS9PYRyCLe5YwOXvmTAX636bXZ3JKUl-TVfBfTIfz88Mj17X4LFwFQFq6j286Ej-N-TJQmwppaHWWpTjTQfJAsCCsqv9KY6W9ND0GMDSrexBpFEFCTOz_8Coc55gxXZo_iOkHWOMcFOaV7zxCxXJXJ1BmfrRI7jrkPhXOmNWjQG9Ii19CROA-T_vW7sG1K6wmzAySWXV5s3f1Er0X24ZlI3t1UgtHsohxcoKtLWR7AP"/>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#162032] flex items-center justify-center">
+<span class="w-2.5 h-2.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]"></span>
+</div>
+</div>
+<div class="min-w-0 flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-[#f8fafc] font-semibold truncate">Aarav Sharma</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-[#0369a1]/30 border border-[#0284c7]/40 text-[#38bdf8] font-semibold">Lead Eng</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#94a3b8] truncate">aarav@vxmusic.in</span>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-[#64748b] mt-0.5">
+<span>to</span>
+<span class="px-1.5 py-0.5 rounded bg-[#0f172a] text-[#94a3b8] font-label-sm text-label-sm border border-[#334155]/60">me</span>
+<span class="px-1.5 py-0.5 rounded bg-[#0f172a] text-[#94a3b8] font-label-sm text-label-sm border border-[#334155]/60">dev-team</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="font-label-sm text-label-sm text-[#94a3b8] font-medium">Today, 9:42 AM</span>
+<span class="font-label-sm text-label-sm text-[#64748b]">24 mins ago</span>
+</div>
+</div>
+<!-- Security / Encryption Shield Pill -->
+<div class="flex items-center gap-space-xs px-space-sm py-1.5 rounded-lg bg-[#0f172a] border border-[#334155] text-[#94a3b8] w-fit">
+<span class="material-symbols-outlined text-[15px] text-[#38bdf8]">verified_user</span>
+<span class="font-label-sm text-label-sm font-medium tracking-tight">End-to-end encrypted with VxShield (256-bit)</span>
+</div>
+<!-- Email Body Typography Section -->
+<div class="flex flex-col gap-space-md text-[#f8fafc]">
+<p class="font-body-lg text-body-lg leading-relaxed text-[#f8fafc]">
+          Hey team,
+        </p>
+<p class="font-body-lg text-body-lg leading-relaxed text-[#cbd5e1]">
+          Following up on the Q4 roadmap, we have wrapped up the streaming engine refactor and dark-first interface tokens for VxMail and VxMusic.
+        </p>
+<!-- Structured Key Achievements Callout Card -->
+<div class="bg-[#182234] border border-[#38bdf8]/40 rounded-xl p-space-md flex flex-col gap-space-sm shadow-[0_0_15px_rgba(56,189,248,0.06)]">
+<div class="flex items-center gap-space-xs text-[#38bdf8]">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+<span class="font-label-md text-label-md font-semibold tracking-wider uppercase">Key Achievements</span>
+</div>
+<div class="flex flex-col gap-space-xs font-body-md text-body-md text-[#cbd5e1] pl-1">
+<div class="flex items-start gap-space-xs">
+<span class="text-[#38bdf8] mt-0.5">•</span>
+<span class="flex-1"><strong class="font-semibold text-[#f8fafc]">Latency Reduction:</strong> Startup cold-load dropped under <span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-[#0369a1]/30 border border-[#0284c7]/40 text-[#38bdf8] font-semibold">120ms</span> across all target devices.</span>
+</div>
+<div class="flex items-start gap-space-xs">
+<span class="text-[#38bdf8] mt-0.5">•</span>
+<span class="flex-1"><strong class="font-semibold text-[#f8fafc]">Keyboard Engine:</strong> Unified command routing and shortcuts synced cleanly across multi-pane desktop views.</span>
+</div>
+<div class="flex items-start gap-space-xs">
+<span class="text-[#38bdf8] mt-0.5">•</span>
+<span class="flex-1"><strong class="font-semibold text-[#f8fafc]">Audio Pipeline:</strong> Integrated 24-bit lossless streaming preview player directly inside thread attachments below.</span>
+</div>
+</div>
+</div>
+<p class="font-body-lg text-body-lg leading-relaxed text-[#cbd5e1]">
+          Please run a quick pass over the attached Figma mockups and latency profiling document. We start final smoke tests tomorrow at 10:00 IST.
+        </p>
+<div class="pt-space-xs">
+<p class="font-body-md text-body-md text-[#94a3b8]">Best regards,</p>
+<p class="font-headline-sm text-headline-sm text-[#f8fafc] font-semibold">Aarav — VxAudio Core</p>
+</div>
+</div>
+<!-- Lossless Audio Quick Preview Banner Component -->
+<div class="bg-[#1e293b] border border-[#334155] rounded-xl p-space-md flex flex-col gap-space-xs shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-[#38bdf8]">graphic_eq</span>
+<span class="font-label-sm text-label-sm text-[#94a3b8] uppercase tracking-wider font-semibold">Stem Preview (48kHz FLAC)</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#38bdf8] font-semibold">00:18 / 01:45</span>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="w-10 h-10 rounded-xl bg-[#38bdf8] text-[#00354a] flex items-center justify-center shrink-0 active:scale-95 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.35)] hover:bg-[#7bd0ff]" id="audio-toggle-btn">
+<span class="material-symbols-outlined text-[20px]" id="audio-play-icon">play_arrow</span>
+</button>
+<!-- Tactile Waveform Bars -->
+<div class="flex-1 h-8 flex items-center gap-1 overflow-hidden px-1">
+<span class="w-1 bg-[#38bdf8] rounded-full h-3 shadow-[0_0_4px_#38bdf8]"></span>
+<span class="w-1 bg-[#38bdf8] rounded-full h-5 shadow-[0_0_4px_#38bdf8]"></span>
+<span class="w-1 bg-[#38bdf8] rounded-full h-7 shadow-[0_0_4px_#38bdf8]"></span>
+<span class="w-1 bg-[#38bdf8] rounded-full h-4 shadow-[0_0_4px_#38bdf8]"></span>
+<span class="w-1 bg-[#38bdf8] rounded-full h-6 shadow-[0_0_4px_#38bdf8]"></span>
+<span class="w-1 bg-[#38bdf8] rounded-full h-8 shadow-[0_0_4px_#38bdf8]"></span>
+<span class="w-1 bg-[#38bdf8]/60 rounded-full h-5"></span>
+<span class="w-1 bg-[#38bdf8]/60 rounded-full h-3"></span>
+<span class="w-1 bg-[#334155] rounded-full h-6"></span>
+<span class="w-1 bg-[#334155] rounded-full h-4"></span>
+<span class="w-1 bg-[#334155] rounded-full h-7"></span>
+<span class="w-1 bg-[#334155] rounded-full h-3"></span>
+<span class="w-1 bg-[#334155] rounded-full h-5"></span>
+<span class="w-1 bg-[#334155] rounded-full h-2"></span>
+<span class="w-1 bg-[#334155] rounded-full h-6"></span>
+<span class="w-1 bg-[#334155] rounded-full h-3"></span>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc]" title="Volume">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+</div>
+<!-- Attachments Section -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#94a3b8] font-semibold tracking-wider uppercase">
+            Attachments (2 files • 16.6 MB)
+          </span>
+<button class="font-label-sm text-label-sm text-[#38bdf8] font-semibold hover:underline flex items-center gap-0.5">
+<span>Download All</span>
+<span class="material-symbols-outlined text-[14px]">download</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Attachment 1: Figma Design -->
+<div class="bg-[#162032] border border-[#334155] rounded-xl p-space-sm flex items-center justify-between gap-space-sm hover:border-[#38bdf8]/50 transition-colors shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-lg bg-[#1e293b] border border-[#334155] flex items-center justify-center text-[#a78bfa] shrink-0">
+<span class="material-symbols-outlined text-[22px]">design_services</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-[#f8fafc] font-medium truncate">redesign-v2.fig</h4>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-[#64748b]">
+<span>Figma File</span>
+<span>•</span>
+<span>14.2 MB</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button class="w-9 h-9 rounded-lg bg-[#0f172a] border border-[#334155] active:bg-[#1e293b] flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] transition-colors" title="Quick preview">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="w-9 h-9 rounded-lg bg-[#0f172a] border border-[#334155] active:bg-[#1e293b] flex items-center justify-center text-[#94a3b8] hover:text-[#38bdf8] transition-colors" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+</div>
+<!-- Attachment 2: Benchmarks PDF -->
+<div class="bg-[#162032] border border-[#334155] rounded-xl p-space-sm flex items-center justify-between gap-space-sm hover:border-[#38bdf8]/50 transition-colors shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-lg bg-[#93000a]/20 border border-[#ffb4ab]/30 flex items-center justify-center text-[#ffb4ab] shrink-0">
+<span class="material-symbols-outlined text-[22px]">picture_as_pdf</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-[#f8fafc] font-medium truncate">vxmusic-audio-benchmarks.pdf</h4>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-[#64748b]">
+<span>PDF Document</span>
+<span>•</span>
+<span>2.4 MB</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button class="w-9 h-9 rounded-lg bg-[#0f172a] border border-[#334155] active:bg-[#1e293b] flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] transition-colors" title="Quick preview">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="w-9 h-9 rounded-lg bg-[#0f172a] border border-[#334155] active:bg-[#1e293b] flex items-center justify-center text-[#94a3b8] hover:text-[#38bdf8] transition-colors" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Sticky Engineered Composer & Dock -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-[#0b0f17]/95 backdrop-blur-xl border-t border-[#1e293b] pb-safe shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
+<div class="px-margin py-space-sm flex flex-col gap-space-xs">
+<!-- Top Sub-Bar with Quick Reply Actions -->
+<div class="flex items-center justify-between text-[#94a3b8] px-1">
+<div class="flex items-center gap-space-xs">
+<button class="flex items-center gap-1 px-space-xs py-1 rounded-md text-[#38bdf8] bg-[#0369a1]/30 border border-[#0284c7]/40 hover:bg-[#0369a1]/50 font-label-sm text-label-sm font-semibold active:opacity-80" id="reply-btn">
+<span class="material-symbols-outlined text-[15px]">reply</span>
+<span>Reply Aarav</span>
+</button>
+<button class="flex items-center gap-1 px-space-xs py-1 rounded-md text-[#94a3b8] hover:text-[#f8fafc] font-label-sm text-label-sm" id="reply-all-btn">
+<span class="material-symbols-outlined text-[15px]">reply_all</span>
+<span>Reply all</span>
+</button>
+<button class="flex items-center gap-1 px-space-xs py-1 rounded-md text-[#94a3b8] hover:text-[#f8fafc] font-label-sm text-label-sm" id="forward-btn">
+<span class="material-symbols-outlined text-[15px]">forward</span>
+<span>Forward</span>
+</button>
+</div>
+<button class="w-7 h-7 rounded-md flex items-center justify-center text-[#64748b] hover:text-[#f8fafc]" id="expand-composer-btn" title="Full Composer">
+<span class="material-symbols-outlined text-[16px]">open_in_full</span>
+</button>
+</div>
+<!-- Quick Inline Composer Field -->
+<div class="flex items-center gap-space-xs bg-[#162032] border border-[#334155] rounded-xl p-1.5 focus-within:ring-2 focus-within:ring-[#38bdf8] focus-within:border-[#38bdf8] transition-all shadow-md">
+<button class="w-10 h-10 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#38bdf8] active:scale-95 transition-transform shrink-0" title="Attach Audio/File">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+<input class="flex-1 bg-transparent text-[#f8fafc] placeholder:text-[#64748b] font-body-md text-body-md outline-none px-1" id="reply-input" placeholder="Write a reply to Aarav..." type="text"/>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] transition-colors shrink-0" id="voice-memo-btn" title="Voice Note">
+<span class="material-symbols-outlined text-[19px]">mic</span>
+</button>
+<button class="h-10 px-space-md rounded-lg bg-[#38bdf8] text-[#00354a] font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-1 active:scale-95 hover:bg-[#7bd0ff] transition-all shadow-[0_0_12px_rgba(56,189,248,0.35)] shrink-0" id="send-reply-btn">
+<span>Send</span>
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Micro-Interactions Script -->
+<script>
+    // Collapsible history expansion
+    const collapsedCard = document.getElementById('collapsed-card');
+    const collapsedBody = document.getElementById('collapsed-body');
+    const snippetText = document.getElementById('snippet-text');
+    const expandIcon = document.getElementById('expand-icon');
+
+    if (collapsedCard && collapsedBody) {
+      collapsedCard.addEventListener('click', () => {
+        const isExpanded = !collapsedBody.classList.contains('hidden');
+        if (isExpanded) {
+          collapsedBody.classList.add('hidden');
+          snippetText.classList.remove('hidden');
+          expandIcon.innerText = 'unfold_more';
+        } else {
+          collapsedBody.classList.remove('hidden');
+          snippetText.classList.add('hidden');
+          expandIcon.innerText = 'unfold_less';
+        }
+      });
+    }
+
+    // Star Button Toggle
+    const starBtn = document.getElementById('star-btn');
+    const starIcon = document.getElementById('star-icon');
+    let isStarred = false;
+    if (starBtn && starIcon) {
+      starBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isStarred = !isStarred;
+        if (isStarred) {
+          starIcon.style.fontVariationSettings = "'FILL' 1";
+          starIcon.classList.add('text-[#38bdf8]');
+        } else {
+          starIcon.style.fontVariationSettings = "'FILL' 0";
+          starIcon.classList.remove('text-[#38bdf8]');
+        }
+      });
+    }
+
+    // Audio stem preview toggle simulation
+    const audioBtn = document.getElementById('audio-toggle-btn');
+    const audioIcon = document.getElementById('audio-play-icon');
+    let isPlaying = false;
+    if (audioBtn && audioIcon) {
+      audioBtn.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        audioIcon.innerText = isPlaying ? 'pause' : 'play_arrow';
+      });
+    }
+
+    // Inline reply simulation
+    const replyInput = document.getElementById('reply-input');
+    const sendReplyBtn = document.getElementById('send-reply-btn');
+    if (sendReplyBtn && replyInput) {
+      sendReplyBtn.addEventListener('click', () => {
+        const val = replyInput.value.trim();
+        if (val) {
+          sendReplyBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span>';
+          setTimeout(() => {
+            replyInput.value = '';
+            sendReplyBtn.innerHTML = '<span>Sent!</span><span class="material-symbols-outlined text-[18px]">check</span>';
+            setTimeout(() => {
+              sendReplyBtn.innerHTML = '<span>Send</span><span class="material-symbols-outlined text-[18px]">send</span>';
+            }, 1800);
+          }, 600);
+        } else {
+          replyInput.focus();
+        }
+      });
+    }
+  </script>
+</div></main></body></html>
