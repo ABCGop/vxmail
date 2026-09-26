@@ -12,6 +12,9 @@ RUN npm install
 
 COPY . .
 
+# In production container, use PostgreSQL schema
+RUN cp packages/database/prisma/schema.postgresql.prisma packages/database/prisma/schema.prisma
+
 RUN npm --workspace=@vxmail/database run generate
 
 CMD ["npm", "--workspace=@vxmail/worker", "run", "start"]

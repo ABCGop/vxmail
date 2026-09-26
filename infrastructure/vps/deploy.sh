@@ -76,8 +76,11 @@ echo "⏳ Waiting for PostgreSQL to be healthy..."
 sleep 5
 
 echo "🗄️ Executing Prisma Database Migrations..."
-docker exec -t vxmail-web npx prisma db push --schema=packages/database/prisma/schema.prisma || true
-docker exec -t vxmail-web npx tsx packages/database/src/seed.ts || true
+docker exec -t vxmail-web cp packages/database/prisma/schema.postgresql.prisma packages/database/prisma/schema.prisma
+docker exec -t vxmail-web npx prisma generate --schema=packages/database/prisma/schema.prisma
+docker exec -t vxmail-web npx prisma db push --schema=packages/database/prisma/schema.prisma --accept-data-loss
+docker exec -t vxmail-web npx tsx packages/database/src/seed.ts
+docker restart vxmail-web vxmail-worker
 
 echo "✨ VxMail Production Deployment Completed Successfully!"
 echo "🌐 Webmail:   https://mail.vxmusic.in"
