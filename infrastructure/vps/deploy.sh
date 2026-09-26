@@ -72,6 +72,9 @@ docker compose -f ./infrastructure/vps/docker-compose.prod.yml build --no-cache
 docker compose -f ./infrastructure/vps/docker-compose.prod.yml up -d
 
 # 7. Run Database Migrations & Initial Seed
+echo "⏳ Waiting for PostgreSQL to be healthy..."
+sleep 5
+
 echo "🗄️ Executing Prisma Database Migrations..."
 docker exec -t vxmail-web npx prisma db push --schema=packages/database/prisma/schema.prisma || true
 docker exec -t vxmail-web npx tsx packages/database/src/seed.ts || true

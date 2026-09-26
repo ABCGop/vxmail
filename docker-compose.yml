@@ -38,7 +38,7 @@ services:
 
   # 3. Stalwart Mail Server (SMTP / IMAP / JMAP / DKIM / SPF / DMARC)
   stalwart:
-    image: stalwartlabs/mail-server:latest
+    image: stalwartlabs/stalwart:latest
     container_name: vxmail-stalwart
     restart: unless-stopped
     ports:
