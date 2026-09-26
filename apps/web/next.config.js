@@ -4,6 +4,9 @@ const path = require("path");
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@vxmail/config", "@vxmail/database", "@vxmail/email"],
+  experimental: {
+    serverComponentsExternalPackages: ["ioredis"],
+  },
   webpack: (config, { isServer }) => {
     config.resolve.extensionAlias = {
       ".js": [".js", ".mjs", ".ts", ".tsx"],
@@ -17,6 +20,7 @@ const nextConfig = {
         net: false,
         tls: false,
         child_process: false,
+        ioredis: false,
       };
     }
     return config;
