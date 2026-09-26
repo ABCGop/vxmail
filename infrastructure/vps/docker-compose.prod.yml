@@ -44,11 +44,12 @@ services:
       - "587:587"     # Client Submission (STARTTLS)
       - "465:465"     # SMTPS (Implicit TLS)
       - "993:993"     # IMAP over SSL
-      - "127.0.0.1:8080:8080" # Stalwart Admin Dashboard
+      - "8080:8080"   # Stalwart Web Admin & Setup Wizard
     volumes:
       - stalwart_data:/opt/stalwart-mail
+      - ../stalwart/config.json:/etc/stalwart/config.json:ro
+      - ../stalwart/config.json:/opt/stalwart-mail/config.json:ro
       - ../stalwart/config.toml:/etc/stalwart/config.toml:ro
-      - ../stalwart/config.toml:/opt/stalwart-mail/etc/config.toml:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./dkim:/opt/stalwart-mail/etc/dkim:ro
       - ./dkim:/etc/stalwart/dkim:ro

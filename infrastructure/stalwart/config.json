@@ -1,0 +1,11 @@
+{
+  "@type": "PostgreSql",
+  "host": "postgres",
+  "port": 5432,
+  "database": "vxmail",
+  "authUsername": "vxmail",
+  "authSecret": {
+    "@type": "Value",
+    "secret": "vxmail_production_pass_2026"
+  }
+}
