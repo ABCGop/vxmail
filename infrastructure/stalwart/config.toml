@@ -53,11 +53,8 @@ user = "vxmail"
 secret = "vxmail_secret_2026"
 
 [store.blob]
-type = "s3"
-endpoint = "http://minio:9000"
-bucket = "vxmail-attachments"
-access-key = "vxmail_s3_admin"
-secret-key = "vxmail_s3_supersecret_key"
+type = "fs"
+path = "/opt/stalwart-mail/blobs"
 
 # DKIM Signing
 [signature.dkim."vxmusic.in"]
