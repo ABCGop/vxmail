@@ -88,19 +88,6 @@ export function clearSessionCookie() {
  * Check if an IP address or username is temporarily locked out due to repeated failed logins.
  */
 export async function checkLoginLockout(identifier: string, ipAddress: string): Promise<{ locked: boolean; retryAfterSec?: number }> {
-  const since = new Date(Date.now() - APP_CONFIG.limits.loginLockoutDurationSec * 1000);
-
-  const failedAttempts = await prisma.loginAttempt.count({
-    where: {
-      success: false,
-      createdAt: { gte: since },
-      OR: [{ identifier }, { ipAddress }],
-    },
-  });
-
-  if (failedAttempts >= APP_CONFIG.limits.rateLimitLoginAttempts) {
-    return { locked: true, retryAfterSec: APP_CONFIG.limits.loginLockoutDurationSec };
-  }
-
+  // Disabled to prevent reverse proxy / Cloudflare shared IP from locking out users
   return { locked: false };
 }
